@@ -1,0 +1,4 @@
+build/*
+dist/*
+*.pyc
+celery_mongodb_nobinary_backend.egg-info/*
