@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name = "celery-mongodb-nobinary-backend",
     description = "Celery backend for MongoDB that does not convert task results into a binary format before storing them in Mongo database.",
-    version = "0.0.1",
+    version = "0.0.2",
     license = "Apache License, Version 2.0",
     author = "Zakir Durumeric",
     author_email = "zakird@gmail.com",

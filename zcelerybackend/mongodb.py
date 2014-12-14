@@ -8,7 +8,7 @@ __author__ = "Zakir Durumeric"
 __license__ = "Apache License, Version 2.0"
 __email__ = "zakird@gmail.com"
 
-from celery.backends.mongodb import MongoBackend 
+from celery.backends.mongodb import MongoBackend, Binary
 
 __all__ = ['MongoNonBinaryBackend']
 
