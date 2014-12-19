@@ -29,6 +29,7 @@ class MongoNonBinaryBackend(MongoBackend):
                     self.current_task_children(request),
                 ))}
         # custom handling of data we embed in metadata
+<<<<<<< HEAD
         
         self.collection.save(meta)
 
@@ -55,6 +56,18 @@ class MongoNonBinaryBackend(MongoBackend):
             delattr(result, "metadata")
         else:
             metadata  = {}
+=======
+        if result:
+            if "log" in result:
+                meta["log"] = result["log"]
+                del result["log"]
+            if "metadata" in result:
+                if "__name" in result["metadata"]:
+                    meta["name"] = result["metadata"]["__name"]
+                    del result["metadata"]["__name"]
+                meta["metadata"] = result["metadata"]
+                del result["metadata"]
+>>>>>>> 7fb962c85d3f4a4459003a85a71cceb555ab0ac0
 
         if "pretty_name" in metadata:
             name = metadata["pretty_name"]
