@@ -19,7 +19,7 @@ class MongoNonBinaryBackend(MongoBackend):
                       traceback, log, metadata, name,
                       request=None, **kwargs):
         """Store return value and status of an executed task."""
-        meta = {'_id': task_id,
+        meta = {'task_id': task_id,
                 'status': status,
                 'result': result,
                 'log': log,
