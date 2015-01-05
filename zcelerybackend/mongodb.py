@@ -29,34 +29,6 @@ class MongoNonBinaryBackend(MongoBackend):
                     self.current_task_children(request),
                 ))}
         # custom handling of data we embed in metadata
-<<<<<<< HEAD
-        
-        self.collection.save(meta)
-
-        return result
-
-    def store_result(self, task_id, result, status,
-                     traceback=None, request=None, **kwargs):
-        """Update task state and result."""
-
-	if "log" in result:
-            log = result["log"]
-            del result["log"]
-        elif hasattr(result, "log"):
-            log = getattr(result, "log")
-            delattr(result, "log")
-        else:
-            log = []
-
-        if "metadata" in result:
-            metadata = result["metadata"]
-            del result["metadata"]
-        elif hasattr(result, "metadata"):
-            metadata = getattr(result, "metadata")
-            delattr(result, "metadata")
-        else:
-            metadata  = {}
-=======
         if result:
             if "log" in result:
                 meta["log"] = result["log"]
@@ -67,7 +39,6 @@ class MongoNonBinaryBackend(MongoBackend):
                     del result["metadata"]["__name"]
                 meta["metadata"] = result["metadata"]
                 del result["metadata"]
->>>>>>> 7fb962c85d3f4a4459003a85a71cceb555ab0ac0
 
         if "pretty_name" in metadata:
             name = metadata["pretty_name"]
