@@ -38,14 +38,24 @@ class MongoNonBinaryBackend(MongoBackend):
         # custom handling of data we embed in metadata
         if result:
             if "log" in result:
-                meta["log"] = result["log"]
+                log = result["log"]
                 del result["log"]
+            elif hasattr(result, "log"):
+                log = getattr(result, "log")
+                delattr(result, "log")
+            else:
+                 log = []
             if "metadata" in result:
-                if "__name" in result["metadata"]:
-                    meta["name"] = result["metadata"]["__name"]
-                    del result["metadata"]["__name"]
-                meta["metadata"] = result["metadata"]
+                metadata = result["metadata"]
                 del result["metadata"]
+            elif hasattr(result, "metadata"):
+                metadata = getattr(result, "metadata")
+                delattr(result, "metadata")
+            else:
+                metadata = {}
+        else:
+            log = []
+            metadata = {}
 
         if "pretty_name" in metadata:
             name = metadata["pretty_name"]
