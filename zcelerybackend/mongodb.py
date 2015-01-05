@@ -28,6 +28,13 @@ class MongoNonBinaryBackend(MongoBackend):
                 'children': Binary(self.encode(
                     self.current_task_children(request),
                 ))}
+        self.collection.save(meta)
+        return result
+
+
+    def store_result(self, task_id, result, status,
+                         traceback=None, request=None, **kwargs):
+        """Update task state and result."""
         # custom handling of data we embed in metadata
         if result:
             if "log" in result:
@@ -47,7 +54,6 @@ class MongoNonBinaryBackend(MongoBackend):
             name = "unknown"
 
         result = self.encode_result(result, status)
-
         self._store_result(task_id, result, status, traceback,
                            log, metadata, name,
                            request=request, **kwargs)
