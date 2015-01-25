@@ -15,6 +15,16 @@ __all__ = ['MongoNonBinaryBackend']
 
 class MongoNonBinaryBackend(MongoBackend):
 
+    EXTRACTED_FIELDS = [
+        "name",
+        "series",
+        "hostname",
+        "start",
+        "end",
+        "warnings",
+        "schedule"
+    ]
+
     def _store_result(self, task_id, result, status,
                       traceback, log, metadata, name,
                       request=None, **kwargs):
@@ -28,6 +38,12 @@ class MongoNonBinaryBackend(MongoBackend):
                 'children': Binary(self.encode(
                     self.current_task_children(request),
                 ))}
+        for field in self.EXTRACTED_FIELDS:
+            if field in metadata:
+                meta[field] = metadata[field]
+                continue
+            if "__%s" % field in metadata:
+                meta[field] = metadata["__%s" % field]
         self.collection.save(meta)
         return result
 
