@@ -27,13 +27,14 @@ class MongoNonBinaryBackend(MongoBackend):
 
     def _store_result(self, task_id, result, status,
                       traceback, log, metadata, name,
-                      request=None, **kwargs):
+                      request=None, file_heads, **kwargs):
         """Store return value and status of an executed task."""
         meta = {'task_id': task_id,
                 'status': status,
                 'result': result,
                 'log': log,
                 'metadata': metadata,
+                'file_heads':file_heads,
                 'traceback': Binary(self.encode(traceback)),
                 'children': Binary(self.encode(
                     self.current_task_children(request),
@@ -51,27 +52,24 @@ class MongoNonBinaryBackend(MongoBackend):
     def store_result(self, task_id, result, status,
                          traceback=None, request=None, **kwargs):
         """Update task state and result."""
-        # custom handling of data we embed in metadata
-        if result:
-            if "log" in result:
-                log = result["log"]
-                del result["log"]
-            elif hasattr(result, "log"):
-                log = getattr(result, "log")
-                delattr(result, "log")
+
+        def __get(name, default):
+            if not result:
+                return default
+            elif name in result:
+               retv = result[name]
+               del result[name]
+               return retv
+            elif hasattr(result, name):
+                retv = getattr(result, name)
+                delattr(result, name)
+                return retv
             else:
-                 log = []
-            if "metadata" in result:
-                metadata = result["metadata"]
-                del result["metadata"]
-            elif hasattr(result, "metadata"):
-                metadata = getattr(result, "metadata")
-                delattr(result, "metadata")
-            else:
-                metadata = {}
-        else:
-            log = []
-            metadata = {}
+                return default
+
+        log = __get("log", [])
+        metadata = __get("metadata", {})
+        file_heads = __get("file_heads", [])
 
         if "pretty_name" in metadata:
             name = metadata["pretty_name"]
@@ -82,6 +80,8 @@ class MongoNonBinaryBackend(MongoBackend):
         result = self.encode_result(result, status)
         self._store_result(task_id, result, status, traceback,
                            log, metadata, name,
-                           request=request, **kwargs)
+                           request=request, 
+                           file_heads=file_heads, 
+                           **kwargs)
         return result
 
