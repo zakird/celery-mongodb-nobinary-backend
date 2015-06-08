@@ -72,7 +72,7 @@ class MongoNonBinaryBackend(MongoBackend):
         log = __get("log", [])
         metadata = __get("metadata", {})
         file_heads = __get("file_heads", [])
-        deferred_traceback = __get("traceback")
+        deferred_traceback = __get("traceback", None)
 
         if "pretty_name" in metadata:
             name = metadata["pretty_name"]
