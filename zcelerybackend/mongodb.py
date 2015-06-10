@@ -29,7 +29,7 @@ class MongoNonBinaryBackend(MongoBackend):
                       traceback, log, metadata, name,
                       request=None, file_heads=None,
                       series_id=None, schedule_id=None,
-                      primary_results_id=None,
+                      primary_result_id=None,
                       deferred_traceback=None, **kwargs):
         """Store return value and status of an executed task."""
         meta = {'task_id': task_id,
@@ -37,7 +37,7 @@ class MongoNonBinaryBackend(MongoBackend):
                 'result': result,
                 'series_id': series_id,
                 'schedule_id': schedule_id,
-                'primary_results_id': primary_results_id,
+                'primary_result_id': primary_result_id,
                 'log': log,
                 'metadata': metadata,
                 'file_heads':file_heads,
