@@ -27,12 +27,17 @@ class MongoNonBinaryBackend(MongoBackend):
 
     def _store_result(self, task_id, result, status,
                       traceback, log, metadata, name,
-                      request=None, file_heads=None, 
+                      request=None, file_heads=None,
+                      series_id=None, schedule_id=None,
+                      primary_results_id=None,
                       deferred_traceback=None, **kwargs):
         """Store return value and status of an executed task."""
         meta = {'task_id': task_id,
                 'status': status,
                 'result': result,
+                'series_id': series_id,
+                'schedule_id': schedule_id,
+                'primary_results_id': primary_results_id,
                 'log': log,
                 'metadata': metadata,
                 'file_heads':file_heads,
@@ -74,6 +79,10 @@ class MongoNonBinaryBackend(MongoBackend):
         file_heads = __get("file_heads", [])
         deferred_traceback = __get("traceback", None)
 
+        schedule_id = metadata.get("schedule_id", None) 
+        series_id = metadata.get("series_id", None) 
+        primary_result_id = metadata.get("primary_result_id", None) 
+
         if "pretty_name" in metadata:
             name = metadata["pretty_name"]
             del metadata["pretty_name"]
@@ -85,6 +94,9 @@ class MongoNonBinaryBackend(MongoBackend):
                            log, metadata, name,
                            request=request, 
                            file_heads=file_heads,
+                           schedule_id=schedule_id,
+                           series_id=series_id,
+                           primary_result_id=primary_result_id,
                            deferred_traceback=deferred_traceback,
                            **kwargs)
         return result
