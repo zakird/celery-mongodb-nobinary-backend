@@ -22,7 +22,8 @@ class MongoNonBinaryBackend(MongoBackend):
         "start",
         "end",
         "warnings",
-        "schedule"
+        "schedule",
+        "last_retry"
     ]
 
     def _store_result(self, task_id, result, status,
